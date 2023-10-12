@@ -9,7 +9,7 @@ class TransportBLE implements ProvTransport {
   final BluetoothDevice peripheral;
   // final BluetoothDevice bluetoothDevice;
   // List<BluetoothService> services;
-  final FlutterBluePlus bleManager = FlutterBluePlus.instance;
+  // final FlutterBluePlus bleManager = FlutterBluePlus.instance;
   final String serviceUUID;
   Map<String, String> nuLookup = {};
   final Map<String, String> lockupTable;
@@ -57,7 +57,8 @@ class TransportBLE implements ProvTransport {
     //   }
     // });
 
-    bool isConnected = (await bleManager.connectedDevices).contains(peripheral);
+    bool isConnected =
+        (await FlutterBluePlus.connectedSystemDevices).contains(peripheral);
     if (isConnected) {
       return Future.value(true);
     }
@@ -71,7 +72,7 @@ class TransportBLE implements ProvTransport {
     }
     // discoverAllServicesAndCharacteristics(
     //     transactionId: 'discoverAllServicesAndCharacteristics');
-    return (await bleManager.connectedDevices).contains(peripheral);
+    return (await FlutterBluePlus.connectedSystemDevices).contains(peripheral);
   }
 
   Future<Uint8List> sendReceive(String epName, Uint8List data) async {
@@ -87,9 +88,8 @@ class TransportBLE implements ProvTransport {
               if (c.uuid.toString() == nuLookup[epName ?? ""]) {
                 // log("WAIT FOR 300 MILLISECONDS");
                 // await Future.delayed(const Duration(milliseconds: 300));
-                log("WRITING DATA $i DEVICEID: ${c.deviceId.toString()} DEVICE UUID: ${c.uuid.toString()} SERVICE UUID: ${c.serviceUuid.toString()} DATA: $data");
-                dynamic resp = await c.write(data, withoutResponse: false);
-                log("WRITING DATA RESPONSE $resp");
+                log("WRITING DATA $i DEVICEID: ${c.remoteId.toString()} DEVICE UUID: ${c.uuid.toString()} SERVICE UUID: ${c.serviceUuid.toString()} DATA: $data");
+                await c.write(data, withoutResponse: false);
               }
             }
           }
@@ -128,7 +128,8 @@ class TransportBLE implements ProvTransport {
     //   }
     // });
 
-    bool check = (await bleManager.connectedDevices).contains(peripheral);
+    bool check =
+        (await FlutterBluePlus.connectedSystemDevices).contains(peripheral);
     if (check) {
       return await peripheral.disconnect();
     } else {
@@ -138,7 +139,7 @@ class TransportBLE implements ProvTransport {
 
   Future<bool> checkConnect() async {
     log("INSIDE CHECK CONNECT FUNCTION");
-    return (await bleManager.connectedDevices).contains(peripheral);
+    return (await FlutterBluePlus.connectedSystemDevices).contains(peripheral);
     // bluetoothDevice.state.listen((state) async {
     //   if (state == BluetoothDeviceState.connected) {
     //     return true;
