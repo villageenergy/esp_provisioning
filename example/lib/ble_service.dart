@@ -12,10 +12,10 @@ import 'package:rxdart/rxdart.dart';
 class BleService {
   static BleService _instance;
   // static BleManager _bleManager;
-  static FlutterBluePlus _bleManager;
+  // static FlutterBluePlus _bleManager;
   static Logger log;
   bool _isPowerOn = false;
-  StreamSubscription<BluetoothState> _stateSubscription;
+  StreamSubscription<BluetoothAdapterState> _stateSubscription;
   BluetoothDevice selectedPeripheral;
   List<String> serviceUUIDs;
 
@@ -24,15 +24,15 @@ class BleService {
       _instance = BleService();
     }
 
-    if (_bleManager == null) {
-      _bleManager = FlutterBluePlus.instance;
-      log = Logger(printer: PrettyPrinter());
-    }
+    // if (_bleManager == null) {
+    //   _bleManager = FlutterBluePlus.instance;
+    //   log = Logger(printer: PrettyPrinter());
+    // }
     log.v('BleService started');
     return _instance;
   }
 
-  Future<BluetoothState> start() async {
+  Future<BluetoothAdapterState> start() async {
     log.i('Ble sevice start');
     if (_isPowerOn) {
       var state = await _waitForBluetoothPoweredOn();
@@ -57,15 +57,15 @@ class BleService {
 
     if (Platform.isAndroid) {
       log.v('enableRadio');
-      await _bleManager.turnOn();
+      await FlutterBluePlus.turnOn();
     }
 
     try {
-      BluetoothState state = await _waitForBluetoothPoweredOn();
-      _isPowerOn = state == BluetoothState.on;
+      BluetoothAdapterState state = await _waitForBluetoothPoweredOn();
+      _isPowerOn = state == BluetoothAdapterState.on;
       if (!_isPowerOn) {
         if (Platform.isAndroid) {
-          await _bleManager.turnOn();
+          await FlutterBluePlus.turnOn();
           _isPowerOn = true;
         }
       }
@@ -73,11 +73,12 @@ class BleService {
     } catch (e) {
       log.e('Error ${e.toString()}');
     }
-    return BluetoothState.unknown;
+    return BluetoothAdapterState.unknown;
   }
 
   void select(BluetoothDevice peripheral) async {
-    bool _check = (await _bleManager.connectedDevices).contains(peripheral);
+    bool _check =
+        (await FlutterBluePlus.connectedSystemDevices).contains(peripheral);
     if (_check == true) {
       await selectedPeripheral?.disconnect();
     }
@@ -92,29 +93,29 @@ class BleService {
     _isPowerOn = false;
     stopScanBle();
     await _stateSubscription?.cancel();
-    bool _check =
-        (await _bleManager.connectedDevices).contains(selectedPeripheral);
+    bool _check = (await FlutterBluePlus.connectedSystemDevices)
+        .contains(selectedPeripheral);
     if (_check == true) {
       await selectedPeripheral?.disconnect();
     }
 
-    if (Platform.isAndroid) {
-      await _bleManager.turnOff();
-    }
+    // if (Platform.isAndroid) {
+    //   await FlutterBluePlus.turnOff()
+    // }
     // await _bleManager.destroyClient();
     return true;
   }
 
   Stream<List<ScanResult>> scanBle() {
-    _bleManager.startScan(
-        scanMode: ScanMode.balanced,
-        allowDuplicates: true,
+    FlutterBluePlus.startScan(
+        // scanMode: ScanMode.balanced,
+        // allowDuplicates: true,
         withServices: [Guid(TransportBLE.PROV_BLE_SERVICE)]);
-    return _bleManager.scanResults;
+    return FlutterBluePlus.scanResults;
   }
 
   Future<void> stopScanBle() {
-    return _bleManager.stopScan();
+    return FlutterBluePlus.stopScan();
   }
 
   Future<EspProv> startProvisioning(
@@ -124,7 +125,7 @@ class BleService {
     }
     BluetoothDevice p = peripheral ?? selectedPeripheral;
     log.v('peripheral here $p');
-    await _bleManager.stopScan();
+    await FlutterBluePlus.stopScan();
     log.v('STOPPPED PERIPHERAL SCAN ========');
 
     EspProv prov =
@@ -136,14 +137,15 @@ class BleService {
     return prov;
   }
 
-  Future<BluetoothState> _waitForBluetoothPoweredOn() async {
-    Completer completer = Completer<BluetoothState>();
+  Future<BluetoothAdapterState> _waitForBluetoothPoweredOn() async {
+    Completer completer = Completer<BluetoothAdapterState>();
     _stateSubscription?.cancel();
-    _stateSubscription = _bleManager.state.listen((bluetoothState) async {
+    _stateSubscription =
+        FlutterBluePlus.adapterState.listen((bluetoothState) async {
       log.v('bluetoothState = $bluetoothState');
 
-      if ((bluetoothState == BluetoothState.on ||
-              bluetoothState == BluetoothState.unauthorized) &&
+      if ((bluetoothState == BluetoothAdapterState.on ||
+              bluetoothState == BluetoothAdapterState.unauthorized) &&
           !completer.isCompleted) {
         completer.complete(bluetoothState);
       }
