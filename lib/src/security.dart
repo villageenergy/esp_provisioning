@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'proto/dart/session.pb.dart';
 
 enum SecurityState {
@@ -14,5 +12,5 @@ abstract class ProvSecurity {
 
   Future<dynamic> decrypt(dynamic data);
 
-  Future<SessionData> securitySession(SessionData responseData);
+  Future<SessionData?> securitySession(SessionData? responseData);
 }

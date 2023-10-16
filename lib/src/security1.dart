@@ -11,12 +11,12 @@ import 'security.dart';
 import 'crypt.dart';
 
 class Security1 implements ProvSecurity {
-  final String pop;
+  final String? pop;
   final bool verbose;
   SecurityState sessionState;
-  SimpleKeyPair clientKey;
-  SimplePublicKey devicePublicKey;
-  Uint8List deviceRandom;
+  SimpleKeyPair? clientKey;
+  SimplePublicKey? devicePublicKey;
+  Uint8List? deviceRandom;
   Crypt crypt = Crypt();
   X25519 x25519 = X25519();
   Sha256 sha256 = Sha256();
@@ -55,7 +55,7 @@ class Security1 implements ProvSecurity {
     return ret;
   }
 
-  Future<SessionData> securitySession(SessionData responseData) async {
+  Future<SessionData?> securitySession(SessionData? responseData) async {
     developer.log("SESSION STATE $sessionState");
     if (sessionState == SecurityState.REQUEST1) {
       sessionState = SecurityState.RESPONSE1_REQUEST2;
@@ -97,8 +97,8 @@ class Security1 implements ProvSecurity {
     return setupRequest;
   }
 
-  Future<SessionData> setup0Response(SessionData responseData) async {
-    SessionData setupResp = responseData;
+  Future<SessionData?> setup0Response(SessionData? responseData) async {
+    SessionData? setupResp = responseData;
     if (setupResp?.secVer != SecSchemeVersion.SecScheme1) {
       throw Exception('Invalid sec scheme');
     }
@@ -116,7 +116,7 @@ class Security1 implements ProvSecurity {
     _verbose('setup0Response: Shared key calculated: ${sharedK.toString()}');
     if (pop != null) {
       var sink = sha256.newHashSink();
-      sink.add(utf8.encode(pop));
+      sink.add(utf8.encode(pop!));
       sink.close();
       final hash = await sink.hash();
       sharedK =
@@ -130,7 +130,7 @@ class Security1 implements ProvSecurity {
     return setupResp;
   }
 
-  Future<SessionData> setup1Request(SessionData responseData) async {
+  Future<SessionData?> setup1Request(SessionData? responseData) async {
     _verbose('setup1Request ${devicePublicKey?.bytes.toString()}');
     var clientVerify =
         await encrypt(Uint8List.fromList(devicePublicKey?.bytes ?? []));
@@ -147,7 +147,7 @@ class Security1 implements ProvSecurity {
     return setupRequest;
   }
 
-  Future<SessionData> setup1Response(SessionData responseData) async {
+  Future<SessionData?> setup1Response(SessionData? responseData) async {
     _verbose('setup1Response');
     var setupResp = responseData;
     if (setupResp?.secVer == SecSchemeVersion.SecScheme1) {

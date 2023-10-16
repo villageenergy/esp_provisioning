@@ -6,7 +6,7 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'transport.dart';
 
 class TransportBLE implements ProvTransport {
-  final BluetoothDevice peripheral;
+  final BluetoothDevice? peripheral;
   // final BluetoothDevice bluetoothDevice;
   // List<BluetoothService> services;
   // final FlutterBluePlus bleManager = FlutterBluePlus.instance;
@@ -37,7 +37,7 @@ class TransportBLE implements ProvTransport {
     for (var name in lockupTable.keys) {
       var charsInt = lockupTable[name] == null
           ? null
-          : int.parse(lockupTable[name], radix: 16);
+          : int.parse(lockupTable[name]!, radix: 16);
       var serviceHex = charsInt?.toRadixString(16).padLeft(4, '0');
       if (charsInt != null && serviceHex != null) {
         nuLookup[name] =
@@ -62,11 +62,11 @@ class TransportBLE implements ProvTransport {
     if (isConnected) {
       return Future.value(true);
     }
-    await peripheral.connect();
+    await peripheral?.connect();
     // await peripheral.requestMtu(512);
 
     try {
-      await peripheral.discoverServices();
+      await peripheral?.discoverServices();
     } catch (e) {
       return Future.error(e);
     }
@@ -75,13 +75,13 @@ class TransportBLE implements ProvTransport {
     return (await FlutterBluePlus.connectedSystemDevices).contains(peripheral);
   }
 
-  Future<Uint8List> sendReceive(String epName, Uint8List data) async {
-    List<BluetoothService> services = await peripheral.discoverServices();
+  Future<List<int>> sendReceive(String? epName, Uint8List? data) async {
+    List<BluetoothService>? services = await peripheral?.discoverServices();
 
     log("EP NAME $epName DATA $data");
-    if (data != null) {
+    if (data != null && (services?.isNotEmpty ?? false)) {
       if (data.length > 0) {
-        for (int i = 0; i < services.length; i++) {
+        for (int i = 0; i < services!.length; i++) {
           if (services[i].uuid.toString() == serviceUUID) {
             var characteristics = services[i].characteristics;
             for (BluetoothCharacteristic c in characteristics) {
@@ -98,9 +98,9 @@ class TransportBLE implements ProvTransport {
     }
 
     log("WRITE DATA COMPLETE, NOW READING");
-    Uint8List readResponse;
-    for (int i = 0; i < services.length; i++) {
-      if (services[i].uuid.toString() == serviceUUID) {
+    late List<int> readResponse;
+    for (int i = 0; i < (services?.length ?? 0); i++) {
+      if (services![i].uuid.toString() == serviceUUID) {
         var characteristics = services[i].characteristics;
         for (BluetoothCharacteristic c in characteristics) {
           if (c.uuid.toString() == nuLookup[epName ?? ""] &&
@@ -131,7 +131,7 @@ class TransportBLE implements ProvTransport {
     bool check =
         (await FlutterBluePlus.connectedSystemDevices).contains(peripheral);
     if (check) {
-      return await peripheral.disconnect();
+      return await peripheral?.disconnect();
     } else {
       return;
     }

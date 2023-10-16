@@ -12,26 +12,26 @@ enum WifiConnectFailedReason {
 
 class ConnectionStatus {
   ConnectionStatus({
-    this.state,
+    this.state = WifiConnectionState.Disconnected,
     this.ip,
     this.failedReason,
   });
 
   final WifiConnectionState state;
-  final String ip;
-  final WifiConnectFailedReason failedReason;
+  final String? ip;
+  final WifiConnectFailedReason? failedReason;
 }
 
 class WifiAP {
   const WifiAP({
     this.ssid,
-    this.rssi,
+    this.rssi = 1,
     this.active = false,
     this.private = true,
   });
 
-  final String ssid;
-  final int rssi;
+  final String? ssid;
+  final num rssi;
   final bool active;
   final bool private;
 

@@ -42,7 +42,7 @@ class CmdGetStatus extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static CmdGetStatus getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<CmdGetStatus>(create);
-  static CmdGetStatus _defaultInstance;
+  static CmdGetStatus? _defaultInstance;
 }
 
 enum RespGetStatus_State { failReason, connected, notSet }
@@ -93,7 +93,7 @@ class RespGetStatus extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static RespGetStatus getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<RespGetStatus>(create);
-  static RespGetStatus _defaultInstance;
+  static RespGetStatus? _defaultInstance;
 
   RespGetStatus_State whichState() =>
       _RespGetStatus_StateByTag[$_whichOneof(0)];
@@ -179,7 +179,7 @@ class CmdSetConfig extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static CmdSetConfig getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<CmdSetConfig>(create);
-  static CmdSetConfig _defaultInstance;
+  static CmdSetConfig? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get ssid => $_getN(0);
@@ -259,7 +259,7 @@ class RespSetConfig extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static RespSetConfig getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<RespSetConfig>(create);
-  static RespSetConfig _defaultInstance;
+  static RespSetConfig? _defaultInstance;
 
   @$pb.TagNumber(1)
   $0.Status get status => $_getN(0);
@@ -299,7 +299,7 @@ class CmdApplyConfig extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static CmdApplyConfig getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<CmdApplyConfig>(create);
-  static CmdApplyConfig _defaultInstance;
+  static CmdApplyConfig? _defaultInstance;
 }
 
 class RespApplyConfig extends $pb.GeneratedMessage {
@@ -331,7 +331,7 @@ class RespApplyConfig extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static RespApplyConfig getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<RespApplyConfig>(create);
-  static RespApplyConfig _defaultInstance;
+  static RespApplyConfig? _defaultInstance;
 
   @$pb.TagNumber(1)
   $0.Status get status => $_getN(0);
@@ -404,7 +404,7 @@ class WiFiConfigPayload extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static WiFiConfigPayload getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<WiFiConfigPayload>(create);
-  static WiFiConfigPayload _defaultInstance;
+  static WiFiConfigPayload? _defaultInstance;
 
   WiFiConfigPayload_Payload whichPayload() =>
       _WiFiConfigPayload_PayloadByTag[$_whichOneof(0)];

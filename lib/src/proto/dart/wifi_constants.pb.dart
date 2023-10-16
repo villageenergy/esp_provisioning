@@ -46,7 +46,7 @@ class WifiConnectedState extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static WifiConnectedState getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<WifiConnectedState>(create);
-  static WifiConnectedState _defaultInstance;
+  static WifiConnectedState? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get ip4Addr => $_getSZ(0);

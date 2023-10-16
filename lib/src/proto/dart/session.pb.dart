@@ -55,7 +55,7 @@ class SessionData extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static SessionData getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<SessionData>(create);
-  static SessionData _defaultInstance;
+  static SessionData? _defaultInstance;
 
   SessionData_Proto whichProto() => _SessionData_ProtoByTag[$_whichOneof(0)];
   void clearProto() => clearField($_whichOneof(0));
