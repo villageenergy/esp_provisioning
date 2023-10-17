@@ -111,7 +111,7 @@ class Security1 implements ProvSecurity {
     _verbose('setup0Response:Device random ${deviceRandom.toString()}');
 
     final sharedKey = await x25519.sharedSecretKey(
-        keyPair: clientKey!, remotePublicKey: devicePublicKey);
+        keyPair: clientKey!, remotePublicKey: devicePublicKey!);
     var sharedK = await sharedKey.extractBytes();
     _verbose('setup0Response: Shared key calculated: ${sharedK.toString()}');
     if (pop != null) {
