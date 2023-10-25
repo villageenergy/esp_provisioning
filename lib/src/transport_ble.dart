@@ -99,6 +99,7 @@ class TransportBLE implements ProvTransport {
 
     log("WRITE DATA COMPLETE, NOW READING");
     List<int> readResponse;
+    log("UPDATED DATA TYPE OF READRESPONSE VARIABLE");
     for (int i = 0; i < services.length; i++) {
       if (services[i].uuid.toString() == serviceUUID) {
         var characteristics = services[i].characteristics;
@@ -110,6 +111,7 @@ class TransportBLE implements ProvTransport {
             log("READ CHARACTERISTIC ${c.uuid.toString()} ${nuLookup[epName ?? ""]}");
             List<int> value = await c.read();
             log("VALUE $value");
+
             readResponse = value;
           }
         }
