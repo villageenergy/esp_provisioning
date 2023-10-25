@@ -75,7 +75,7 @@ class TransportBLE implements ProvTransport {
     return (await FlutterBluePlus.connectedSystemDevices).contains(peripheral);
   }
 
-  Future<Uint8List> sendReceive(String epName, Uint8List data) async {
+  Future<List<int>> sendReceive(String epName, Uint8List data) async {
     List<BluetoothService> services = await peripheral.discoverServices();
 
     log("EP NAME $epName DATA $data");
@@ -98,7 +98,7 @@ class TransportBLE implements ProvTransport {
     }
 
     log("WRITE DATA COMPLETE, NOW READING");
-    Uint8List readResponse;
+    List<int> readResponse;
     for (int i = 0; i < services.length; i++) {
       if (services[i].uuid.toString() == serviceUUID) {
         var characteristics = services[i].characteristics;
