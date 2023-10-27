@@ -63,7 +63,7 @@ class TransportBLE implements ProvTransport {
       return Future.value(true);
     }
     await peripheral.connect();
-    // await peripheral.requestMtu(512);
+    await peripheral.requestMtu(512);
 
     try {
       await peripheral.discoverServices();

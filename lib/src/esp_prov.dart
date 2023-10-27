@@ -30,6 +30,7 @@ class EspProv {
       while (await transport?.checkConnect() ?? false) {
         log("TRANSPORT CHECK CONNECT TRUE");
         var request = await security?.securitySession(responseData);
+        log("RESPONSE DATA $responseData");
         if (request == null) {
           log("REQUEST IS NULL");
 
