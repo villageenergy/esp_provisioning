@@ -58,8 +58,7 @@ class TransportBLE implements ProvTransport {
     //   }
     // });
 
-    bool isConnected =
-        (await FlutterBluePlus.connectedSystemDevices).contains(peripheral);
+    bool isConnected = (FlutterBluePlus.connectedDevices).contains(peripheral);
     if (isConnected) {
       return Future.value(true);
     }
@@ -75,7 +74,7 @@ class TransportBLE implements ProvTransport {
     }
     // discoverAllServicesAndCharacteristics(
     //     transactionId: 'discoverAllServicesAndCharacteristics');
-    return (await FlutterBluePlus.connectedSystemDevices).contains(peripheral);
+    return (FlutterBluePlus.connectedDevices).contains(peripheral);
   }
 
   Future<Uint8List> sendReceive(String epName, Uint8List data) async {
@@ -133,8 +132,7 @@ class TransportBLE implements ProvTransport {
     //   }
     // });
 
-    bool check =
-        (await FlutterBluePlus.connectedSystemDevices).contains(peripheral);
+    bool check = (FlutterBluePlus.connectedDevices).contains(peripheral);
     if (check) {
       return await peripheral.disconnect();
     } else {
@@ -144,7 +142,7 @@ class TransportBLE implements ProvTransport {
 
   Future<bool> checkConnect() async {
     log("INSIDE CHECK CONNECT FUNCTION");
-    return (await FlutterBluePlus.connectedSystemDevices).contains(peripheral);
+    return (FlutterBluePlus.connectedDevices).contains(peripheral);
     // bluetoothDevice.state.listen((state) async {
     //   if (state == BluetoothDeviceState.connected) {
     //     return true;

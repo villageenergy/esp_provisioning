@@ -77,8 +77,7 @@ class BleService {
   }
 
   void select(BluetoothDevice peripheral) async {
-    bool _check =
-        (await FlutterBluePlus.connectedSystemDevices).contains(peripheral);
+    bool _check = (FlutterBluePlus.connectedDevices).contains(peripheral);
     if (_check == true) {
       await selectedPeripheral?.disconnect();
     }
@@ -93,8 +92,8 @@ class BleService {
     _isPowerOn = false;
     stopScanBle();
     await _stateSubscription?.cancel();
-    bool _check = (await FlutterBluePlus.connectedSystemDevices)
-        .contains(selectedPeripheral);
+    bool _check =
+        (FlutterBluePlus.connectedDevices).contains(selectedPeripheral);
     if (_check == true) {
       await selectedPeripheral?.disconnect();
     }
